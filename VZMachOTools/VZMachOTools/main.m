@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "VZMachOManager.h"
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
-        NSLog(@"Hello, World!");
+        const char* str = argv[1];
+        [[VZMachOManager sharedInstance] loadBinary:[NSString stringWithUTF8String:str]];
         
-        NSString *byteOrder = [NSString stringWithFormat:@"%x",CFSwapInt32(0x12345678)];
-        NSLog(@"%@",byteOrder);
     }
     return 0;
 }

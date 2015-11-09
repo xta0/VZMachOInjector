@@ -10,9 +10,9 @@
 
 @interface NSData (Bytes)
 
-- (uint8_t)byteFromLoc:(NSUInteger)offset;
-- (uint16_t)shortFromLoc:(NSUInteger)offset;
-- (uint32_t)intFromLoc:(NSUInteger)offset;
-- (uint64_t)longFromLoc:(NSUInteger)offset;
+- (uint8_t)vz_byteFromLoc:(NSUInteger)offset;
+- (uint16_t)vz_shortFromLoc:(NSUInteger)offset;
+- (uint32_t)vz_intFromLoc:(NSUInteger)offset;
+- (uint64_t)vz_longFromLoc:(NSUInteger)offset;
 
 @end

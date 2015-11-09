@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		45007D351BEF759D001B3C4E /* VZMachOHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 45007D341BEF759D001B3C4E /* VZMachOHeader.m */; };
+		45007D381BEF7749001B3C4E /* VZMachOManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 45007D371BEF7749001B3C4E /* VZMachOManager.m */; };
 		456C52551BEB2F6F00D15B4E /* NSData+Bytes.m in Sources */ = {isa = PBXBuildFile; fileRef = 456C52541BEB2F6F00D15B4E /* NSData+Bytes.m */; };
 		4597A27F1BE88B5A003EFFF9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4597A27E1BE88B5A003EFFF9 /* main.m */; };
 /* End PBXBuildFile section */
@@ -24,6 +26,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		45007D331BEF759D001B3C4E /* VZMachOHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VZMachOHeader.h; sourceTree = "<group>"; };
+		45007D341BEF759D001B3C4E /* VZMachOHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VZMachOHeader.m; sourceTree = "<group>"; };
+		45007D361BEF7749001B3C4E /* VZMachOManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VZMachOManager.h; sourceTree = "<group>"; };
+		45007D371BEF7749001B3C4E /* VZMachOManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VZMachOManager.m; sourceTree = "<group>"; };
+		45007D391BEF81F9001B3C4E /* VZMachODefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VZMachODefines.h; sourceTree = "<group>"; };
 		456C52531BEB2F6F00D15B4E /* NSData+Bytes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Bytes.h"; sourceTree = "<group>"; };
 		456C52541BEB2F6F00D15B4E /* NSData+Bytes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Bytes.m"; sourceTree = "<group>"; };
 		4597A27B1BE88B5A003EFFF9 /* VZMachOTools */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VZMachOTools; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +70,11 @@
 				4597A27E1BE88B5A003EFFF9 /* main.m */,
 				456C52531BEB2F6F00D15B4E /* NSData+Bytes.h */,
 				456C52541BEB2F6F00D15B4E /* NSData+Bytes.m */,
+				45007D331BEF759D001B3C4E /* VZMachOHeader.h */,
+				45007D341BEF759D001B3C4E /* VZMachOHeader.m */,
+				45007D361BEF7749001B3C4E /* VZMachOManager.h */,
+				45007D371BEF7749001B3C4E /* VZMachOManager.m */,
+				45007D391BEF81F9001B3C4E /* VZMachODefines.h */,
 			);
 			path = VZMachOTools;
 			sourceTree = "<group>";
@@ -123,7 +135,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45007D351BEF759D001B3C4E /* VZMachOHeader.m in Sources */,
 				456C52551BEB2F6F00D15B4E /* NSData+Bytes.m in Sources */,
+				45007D381BEF7749001B3C4E /* VZMachOManager.m in Sources */,
 				4597A27F1BE88B5A003EFFF9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
