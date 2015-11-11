@@ -72,7 +72,7 @@
         _fatHeader = [VZMachOFatHeader fatHeaderWithBinary:originalData];
         [_fatHeader.fatArchHeaders enumerateObjectsUsingBlock:^(VZMachOFatArcHeader* obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
-            VZMachOExcutable* executable = [VZMachOExcutable excutableWithBinary:originalData Offset:obj.offset];
+            VZMachOExcutable* executable = [VZMachOExcutable excutableWithBinary:binary Offset:obj.offset];
             if (executable.isExcutableAvailable) {
                 [_archs addObject:executable];
             }
@@ -81,7 +81,7 @@
     //thin header
     else if (magic == MH_MAGIC || magic == MH_MAGIC_64)
     {
-        VZMachOExcutable* executable = [VZMachOExcutable excutableWithBinary:originalData Offset:0];
+        VZMachOExcutable* executable = [VZMachOExcutable excutableWithBinary:binary Offset:0];
         if (executable.isExcutableAvailable) {
             [_archs addObject:executable];
         }
@@ -103,8 +103,18 @@
 }
 
 - (BOOL)rewriteBinary
-
 {
+    NSFileManager* manager = [NSFileManager defaultManager];
+    NSString* path = @"./out";
+    if ([manager fileExistsAtPath:path]) {
+        
+        NSError* error = nil;
+        
+        if(![manager removeItemAtPath:path error:&error])
+        {
+            return NO;
+        }
+    }
     return [_pBinary writeToFile:@"./out" atomically:YES];
 }
 

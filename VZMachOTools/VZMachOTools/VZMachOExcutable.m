@@ -14,20 +14,29 @@
 #import <mach-o/fat.h>
 
 @interface VZMachOExcutable()
+{
 
+}
+
+@property(nonatomic,strong)NSMutableData* binary;
 @property(nonatomic,assign)BOOL isExcutableEncypted;
 @property(nonatomic,strong)VZMachOArcHeader* excutableHeader;
-@property(nonatomic,strong)NSMutableArray* loadCommandsInternal;
+@property(nonatomic,assign)NSUInteger cryptidOffset;
 
 @end
 
 @implementation VZMachOExcutable
 {}
 
-+ (instancetype)excutableWithBinary:(NSData* )binary Offset:(NSUInteger)offset
++ (instancetype)excutableWithBinary:(NSMutableData* )binary Offset:(NSUInteger)offset
 {
+    if (!binary) {
+        return nil;
+    }
+    
     VZMachOExcutable* excutable = [VZMachOExcutable new];
-    excutable.excutableHeader = [VZMachOArcHeader headerWithBinary:binary Offset:offset];
+    excutable.binary = binary;
+    excutable.excutableHeader = [VZMachOArcHeader headerWithBinary:binary.copy Offset:offset];
     
     NSUInteger l_offset = offset+ excutable.excutableHeader.headerSize;
     for (int i=0; i<excutable.excutableHeader.numberOfLoadCommands; i++)
@@ -46,11 +55,19 @@
             else
             {
                 excutable.isExcutableEncypted = YES;
+                excutable.cryptidOffset = l_offset + sizeof(struct encryption_info_command) - sizeof(uint32_t);
+                NSLog(@"cryptidOffset is : %lx",(unsigned long)excutable.cryptidOffset);
+
             }
         }
         
-        
-        l_offset += l_cmd->cmdsize;
+        if (cmd == LC_CODE_SIGNATURE) {
+            
+            struct linkedit_data_command* code_cmd = (struct linkedit_data_command* )(l_cmd);
+            
+            
+        }
+        l_offset +=  l_cmd->cmdsize;
     }
     
     return excutable;
@@ -61,12 +78,15 @@
     return self.excutableHeader.isAvailable;
 }
 
-
+uint32_t CRYPTID_ZERO = 0x00000000;
 - (void)removeEncryption
 {
     if (self.isExcutableEncypted) {
         
-        
+        //set cryptid to 0:
+        if (self.cryptidOffset > 0) {
+           [self.binary replaceBytesInRange:NSMakeRange(self.cryptidOffset, sizeof(uint32_t)) withBytes:&CRYPTID_ZERO];
+        }
     }
 
 }

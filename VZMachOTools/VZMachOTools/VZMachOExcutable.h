@@ -16,7 +16,7 @@
 @property(nonatomic,strong,readonly)VZMachOArcHeader* excutableHeader;
 @property(nonatomic,strong,readonly)NSArray* loadCommands;
 
-+ (instancetype)excutableWithBinary:(NSData* )binary Offset:(NSUInteger)offset;
++ (instancetype)excutableWithBinary:(NSMutableData* )binary Offset:(NSUInteger)offset;
 
 - (void)removeEncryption;
 - (void)removeCodeSignature;
