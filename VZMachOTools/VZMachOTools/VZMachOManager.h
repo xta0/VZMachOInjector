@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class VZMachOHeader;
+@class VZMachOFatHeader;
 @interface VZMachOManager : NSObject
+
+@property(nonatomic,assign,readonly)BOOL binaryHasFatHeader;
+@property(nonatomic,strong,readonly)VZMachOFatHeader* fatHeader;
+@property(nonatomic,strong,readonly)NSArray* archHeaders;
+@property(nonatomic,assign,readonly)BOOL isBinaryEncrypted;
 
 + (instancetype)sharedInstance;
 
@@ -17,6 +22,8 @@
 
 - (void)unloadBinary;
 
-- (NSArray* )headers;
+- (BOOL)removeEncryption;
+
+- (BOOL)removeSignature;
 
 @end

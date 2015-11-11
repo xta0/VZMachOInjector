@@ -7,7 +7,8 @@
 //
 
 #import "VZMachOManager.h"
-#import "VZMachOHeader.h"
+#import "VZMachOFatHeader.h"
+#import "VZMachOArcHeader.h"
 #import "NSData+Bytes.h"
 #import "VZMachODefines.h"
 #import <mach-o/loader.h>
@@ -29,6 +30,7 @@
     if (self) {
         
         _headers = [NSMutableArray new];
+        _binaryHasFatHeader = NO;
         
     }
     return self;
@@ -44,6 +46,11 @@
     return manager;
 }
 
+- (NSArray* )archHeaders
+{
+    return [_headers copy];
+}
+
 - (BOOL)loadBinary:(NSString* )path
 {
     NSData *originalData = [NSData dataWithContentsOfFile:path];
@@ -54,38 +61,24 @@
     }
     
     uint32_t magic = [binary vz_intFromLoc:0];
-    NSLog(@"magic header is : %x",magic);
-    
-    bool shouldSwap = vz_should_swap(magic);
-    
+
     // a FAT file is basically a collection of thin MachO binaries
     if (magic == FAT_CIGAM || magic == FAT_MAGIC) {
-        NSLog(@"Found FAT Header");
-        
-        struct fat_header fat = *(struct fat_header *)binary.bytes;
-        fat.nfat_arch = CFSwapInt32(fat.nfat_arch); //标识fat_header下有几个fat_arch结构
-        int offset = sizeof(struct fat_header);
-        
-        //生成headers
-        for (int i=0; i<fat.nfat_arch; i++)
-        {
-            struct fat_arch arch;
-            arch = *(struct fat_arch* )([binary bytes] + offset);
-            NSUInteger header_offset  = shouldSwap?CFSwapInt32(arch.offset):arch.offset;
-            VZMachOHeader* header = [VZMachOHeader headerWithBinary:originalData Offset:header_offset];
+
+        _binaryHasFatHeader = YES;
+        _fatHeader = [VZMachOFatHeader fatHeaderWithBinary:originalData];
+        [_fatHeader.fatArchHeaders enumerateObjectsUsingBlock:^(VZMachOFatArcHeader* obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            VZMachOArcHeader* arcHeader = [VZMachOArcHeader headerWithBinary:originalData Offset:obj.offset];
             
-            //支持支x_86,arm,arm64三种CPU类型
-            if (header.isAvailable) {
-                [_headers addObject:header];
+            if (arcHeader.isAvailable) {
+                [_headers addObject:arcHeader];
             }
-            
-            offset += sizeof(struct fat_arch);
-        }
+        }];
     }
     //thin header
     else if (magic == MH_MAGIC || magic == MH_MAGIC_64)
     {
-         VZMachOHeader* header = [VZMachOHeader headerWithBinary:originalData Offset:0];
+         VZMachOArcHeader* header = [VZMachOArcHeader headerWithBinary:originalData Offset:0];
         if (header.isAvailable) {
             [_headers addObject:header];
         }
@@ -104,9 +97,24 @@
 }
 
 
-- (NSArray* )headers
+
+- (BOOL)removeEncryption
 {
-    return [_headers copy];
+    if (_pBinary == NULL) {
+        return NO;
+    }
+
+        return YES;
+}
+
+
+- (BOOL)removeSignature
+{
+    if (_pBinary == NULL) {
+        return NO;
+    }
+
+        return YES;
 }
 
 @end

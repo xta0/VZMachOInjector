@@ -6,13 +6,13 @@
 //  Copyright © 2015年 VizLab. All rights reserved.
 //
 
-#import "VZMachOHeader.h"
+#import "VZMachOArcHeader.h"
 #import "NSData+Bytes.h"
 #import "VZMachODefines.h"
 #import <mach-o/loader.h>
 #import <mach-o/fat.h>
 
-@interface VZMachOHeader()
+@interface VZMachOArcHeader()
 
 @property(nonatomic,assign)BOOL isAvailable;
 @property(nonatomic,assign)BOOL is64bit;
@@ -23,11 +23,11 @@
 
 @end
 
-@implementation VZMachOHeader
+@implementation VZMachOArcHeader
 
 + (instancetype)headerWithBinary:(NSData* )binary Offset:(NSUInteger)offset
 {
-    VZMachOHeader* obj = [VZMachOHeader new];
+    VZMachOArcHeader* obj = [VZMachOArcHeader new];
     
     struct mach_header header = *(struct mach_header* )(binary.bytes + offset);
     if (header.magic == MH_MAGIC || header.magic == MH_CIGAM)
@@ -79,6 +79,11 @@
     else{
         return @"";
     }
+}
+
+- (NSString* )description
+{
+    return [NSString stringWithFormat:@"ArchHeader:{\nisAvailable:%d\nis64Bit:%d\nheaderSize:%ld\ncpu:%@ \nloadCommands:%ld\nsizeOfCommands:%ld\n }",self.isAvailable,self.is64bit,self.headerSize,self.cpuType,self.numberOfLoadCommands,self.sizeOfAllLoadCommnads];
 }
 
 
