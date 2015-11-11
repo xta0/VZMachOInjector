@@ -13,8 +13,8 @@
 
 @property(nonatomic,assign,readonly)BOOL binaryHasFatHeader;
 @property(nonatomic,strong,readonly)VZMachOFatHeader* fatHeader;
-@property(nonatomic,strong,readonly)NSArray* archHeaders;
-@property(nonatomic,assign,readonly)BOOL isBinaryEncrypted;
+@property(nonatomic,strong,readonly)NSArray* machoExcutables;
+
 
 + (instancetype)sharedInstance;
 
@@ -22,8 +22,7 @@
 
 - (void)unloadBinary;
 
-- (BOOL)removeEncryption;
+- (BOOL)rewriteBinary;
 
-- (BOOL)removeSignature;
 
 @end
