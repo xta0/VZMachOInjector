@@ -91,8 +91,6 @@
         NSLog(@"no headers found.");
     }
     
-    //chack to see if cycrptid is zero
-    
     
     return YES;
 }
